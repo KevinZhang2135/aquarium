@@ -17,7 +17,7 @@ Screen::Screen(uint width, uint height, bool full_screen) {
     }
 
     // Generates optimization hash arrays
-    spatial_hash = new SpatialHash(NUM_FISH, GRID_SIZE, Vector2(width, height));
+    spatial_hash = new SpatialHash(1000, GRID_SIZE, Vector2(width, height));
 }
 
 Screen::~Screen() {
@@ -42,9 +42,9 @@ void Screen::HandleEvents() {
             break;
 
         case SDL_MOUSEBUTTONDOWN:
-            for (Fish *fish : spatial_hash->fishes) {
-                fish->SetPosition(Vector2(mouse_x, mouse_y));
-            }
+            // for (Fish *fish : spatial_hash->fishes) {
+            //     fish->SetPosition(Vector2(mouse_x, mouse_y));
+            // }
 
             break;
 
@@ -111,7 +111,7 @@ void Screen::Render() const {
     SDL_RenderClear(renderer);
 
     // Draws fish
-    for (Fish *fish : spatial_hash->fishes) DrawFish(fish);
+    // for (Fish *fish : spatial_hash->fishes) DrawFish(fish);
 
     if (debug) {
         // Draws optimization grid lines
@@ -123,11 +123,11 @@ void Screen::Render() const {
             hlineColor(renderer, 0, height, y, 0xffffffff);
         }
 
-        for (Fish *fish : spatial_hash->GetFishFromPoint(Vector2(mouse_x, mouse_y))) {
-            Anchor *anchor = fish->head;
-            // Debug point
-            filledCircleColor(renderer, anchor->position.x, anchor->position.y, anchor->radius, 0xff0000ff);
-        }
+        // for (Fish *fish : spatial_hash->GetFishFromPoint(Vector2(mouse_x, mouse_y))) {
+        //     Anchor *anchor = fish->head;
+        //     // Debug point
+        //     filledCircleColor(renderer, anchor->position.x, anchor->position.y, anchor->radius, 0xff0000ff);
+        // }
     }
 
     SDL_RenderPresent(renderer);
@@ -147,7 +147,6 @@ vector<Fish *> Screen::SearchForBoids(Vector2 point) const {
             offset = offset * GRID_SIZE;
 
             vector<Fish *> other_boids = spatial_hash->GetFishFromPoint(point + offset);
-
             nearby_boids.insert(nearby_boids.end(), other_boids.begin(), other_boids.end());
         }
     }
@@ -167,14 +166,14 @@ void Screen::UpdateBoid(Fish *boid) const {
 
 /// @brief Updates the heading and position of each boid
 void Screen::Update() {
-    spatial_hash->Update();
-    for (Fish *fish : spatial_hash->fishes) {
-        UpdateBoid(fish);
-    }
+    // spatial_hash->Update();
+    // for (Fish *fish : spatial_hash->fishes) {
+    //     UpdateBoid(fish);
+    // }
 
-    for (Fish *fish : spatial_hash->fishes) {
-        fish->Move();
-    }
+    // for (Fish *fish : spatial_hash->fishes) {
+    //     fish->Move();
+    // }
 
     SDL_GetMouseState(&mouse_x, &mouse_y);
     SDL_UpdateWindowSurface(window);

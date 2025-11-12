@@ -14,11 +14,11 @@ SpatialHash::SpatialHash(int num_fish, int grid_size, Vector2 screen_size) : num
     spatial_list = vector<KeyIndexPair>(grid_size);
     start_indices = vector<int>(grid_size);
 
-    Update();
+   // Update();
 }
 
 SpatialHash::~SpatialHash() {
-    for (Fish *fish : fishes) {
+    for (Fish* fish : fishes) {
         delete fish;
     }
 
@@ -40,9 +40,9 @@ uint SpatialHash::HashPoint(Vector2 point) const {
 /// @brief Retrieves the indices of all fish in a cell
 /// @param point The point to be hashed and lookup
 /// @return A vector of the indices of all fish in the specified cell
-vector<Fish *> SpatialHash::GetFishFromPoint(Vector2 point) const {
+vector<Fish*> SpatialHash::GetFishFromPoint(Vector2 point) const {
     uint key = HashPoint(point);
-    vector<Fish *> indices;
+    vector<Fish*> indices;
 
     // Loops from the index of the first fish of a cell
     for (uint i = start_indices[key]; i < num_fish; i++) {
@@ -57,7 +57,7 @@ vector<Fish *> SpatialHash::GetFishFromPoint(Vector2 point) const {
         }
 
         uint fish_index = spatial_list[i].fish_index;
-        Fish *fish = fishes[fish_index];
+        Fish* fish = fishes[fish_index];
         indices.push_back(fish);
     }
 
@@ -68,7 +68,7 @@ vector<Fish *> SpatialHash::GetFishFromPoint(Vector2 point) const {
 void SpatialHash::Update() {
     // Generates a hash for the position of each fish
     for (uint i = 0; i < num_fish; i++) {
-        Fish *fish = fishes[i];
+        Fish* fish = fishes[i];
         Vector2 position = fish->head->position;
 
         // Converts fish position into hash

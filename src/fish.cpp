@@ -4,19 +4,19 @@ Fish::Fish(const int search_radius, const Vector2 screen_size)
     : Fish(Vector2(0, 0), 0.0f, search_radius, screen_size) {}
 
 Fish::Fish(Vector2 position, float angle, int search_radius, Vector2 screen_size)
-    : search_radius(search_radius),
-      screen_size(screen_size),
-      min_bound(Vector2(-GRID_MARGIN, -GRID_MARGIN)),
-      max_bound(-min_bound + screen_size) {
-    velocity = {MAX_SPEED, 0};
+    : velocity({MAX_SPEED, 0}),
+      head(new Head{position, angle}),
+
+      min_bound({-GRID_MARGIN, -GRID_MARGIN}),
+      max_bound(min_bound + screen_size),
+      search_radius(search_radius),
+      screen_size(screen_size) {
     velocity = velocity.RotateToAngle(angle + M_PI);
 
-    // Creates head
-    head = new Head(position, angle);
-    SetAnchorRadius(head, 0);
-
     // Generates segments from head using angle
-    Anchor *segment = head;
+    SetAnchorRadius(head, 0);
+    Anchor* segment = head;
+
     for (int i = 1; i < MAX_SEGMENTS; i++) {
         segment->next = new Anchor();
         segment = segment->next;
@@ -116,7 +116,7 @@ void Fish::Move() {
 
 /// @brief Searches for nearby boids to adjust heading
 /// @param nearby_boids The boids that are within a 3x3 cell grid centered on the fish
-void Fish::Update(const vector<Fish *> nearby_boids) {
+void Fish::Update(const vector<Fish*> nearby_boids) {
     // Average of all nearby boids
     Vector2 average_center, average_velocity;
     uint boid_count = 0;
@@ -125,7 +125,7 @@ void Fish::Update(const vector<Fish *> nearby_boids) {
     Vector2 close_center;
     uint close_count = 0;
 
-    for (Fish *boid : nearby_boids) {
+    for (Fish* boid : nearby_boids) {
         if (boid != this) {
             Vector2 boid_position = boid->head->position;
             float distance = head->position.DistanceTo(boid_position);
@@ -167,10 +167,12 @@ void Fish::Update(const vector<Fish *> nearby_boids) {
     velocity = velocity.ScaleToLength(MAX_SPEED);
 }
 
-/// @brief Sets the radius of a fish anchor
-/// @param anchor The anchor of which the radius is set
-/// @param anchor_index The position of the anchor
-void Fish::SetAnchorRadius(Anchor *anchor, const int anchor_index) const {
+/**
+ * Traverses anchor_index anchors down the root anchor to set the radius of a fish anchor
+ * @param anchor The anchor of which the radius is set
+ * @param anchor_index The position of the anchor
+ */
+void Fish::SetAnchorRadius(Anchor* anchor, const int anchor_index) const {
     // Radius is approximated with a semi-circle before tapering and with a
     // decreasing exponential after tapering
     float fish_radius = SCALE * CalcAnchorRadius(anchor_index);

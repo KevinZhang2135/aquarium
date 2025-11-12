@@ -15,26 +15,26 @@ class SpatialHash {
         static bool Compare(KeyIndexPair a, KeyIndexPair b);
     };
 
-   public:
-    vector<Fish *> fishes;
+    public:
+        vector<Fish*> fishes;
 
-    SpatialHash(int num_fish, int grid_size, Vector2 screen_size);
-    ~SpatialHash();
+        SpatialHash(int num_fish, int grid_size, Vector2 screen_size);
+        ~SpatialHash();
 
-    uint HashPoint(Vector2 point) const;
-    vector<Fish *> GetFishFromPoint(Vector2 point) const;
-    void Update();
+        uint HashPoint(Vector2 point) const;
+        vector<Fish*> GetFishFromPoint(Vector2 point) const;
+        void Update();
 
-   private:
-    int num_fish;
-    int grid_size;
+    private:
+        int num_fish;
+        int grid_size;
 
-    // List of key-index pairs
-    vector<KeyIndexPair> spatial_list;
+        // List of key-index pairs
+        vector<KeyIndexPair> spatial_list;
 
-    // List of the start indices of consecutive cell positions for a
-    // sorted spatial list
-    vector<int> start_indices;
+        // List of the start indices of consecutive cell positions for a
+        // sorted spatial list
+        vector<int> start_indices;
 };
 
 int Randint(int min, int max);
