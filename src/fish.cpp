@@ -59,7 +59,7 @@ Vector2 Fish::Separate(const Vector2 close_center) const {
 /// @param average_velocity The mean velocity of all nearby boids
 /// @return The acceleration towards the mean heading
 Vector2 Fish::Align(const Vector2 average_velocity) const {
-    float factor = 0.005f;
+    float factor = 0.01f;
     Vector2 acceleration = average_velocity - velocity;
 
     return acceleration * factor;

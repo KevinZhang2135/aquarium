@@ -20,21 +20,8 @@ SpatialHash::SpatialHash(const int num_fish, const int grid_size, const Vector2 
             new Fish(position, angle, grid_size, screen_size),
         };
     }
-
-    std::cout << "Spatial list size: " << spatial_list.size() << "\n";
-    std::cout << "Start_indices: " << start_indices.size() << "\n";
-    std::cout << "Num cells: " << num_grid_cells << "\n";
-    std::cout << "Num fish: " << num_fish << "\n";
-
+    
     Update();
-    // TODO REMOVE
-    // int i = 0;
-    // for (CellFishPair pair: spatial_list) {
-    //     uint cell_key = pair.cell_key;
-    //     Fish* fish = pair.fish;
-    //     printf("[%2d][%2d] (%7.3f, %7.3f)\n", i, cell_key, fish->head->position.x, fish->head->position.y);
-    //     i++;
-    // }
 }
 
 SpatialHash::~SpatialHash() {
