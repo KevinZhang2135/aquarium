@@ -10,31 +10,33 @@
 #include "vector2.h"
 
 class SpatialHash {
-    struct KeyIndexPair {
-        uint cell_key, fish_index;
-        static bool Compare(KeyIndexPair a, KeyIndexPair b);
+    struct CellFishPair {
+        uint cell_key;
+        Fish* fish;
+        static bool Compare(CellFishPair a, CellFishPair b);
     };
 
-    public:
-        vector<Fish*> fishes;
+   public:
+    SpatialHash(const int num_fish, const int grid_size, const Vector2 screen_size);
+    ~SpatialHash();
 
-        SpatialHash(int num_fish, int grid_size, Vector2 screen_size);
-        ~SpatialHash();
+    uint HashPoint(const Vector2 point) const;
+    vector<Fish*> GetFishFromPoint(const Vector2 point) const;
 
-        uint HashPoint(Vector2 point) const;
-        vector<Fish*> GetFishFromPoint(Vector2 point) const;
-        void Update();
+    vector<Fish*> GetFish() const;
+    void Update();
 
-    private:
-        int num_fish;
-        int grid_size;
+   private:
+    uint num_fish;
+    uint grid_size;
+    uint num_grid_cells;
 
-        // List of key-index pairs
-        vector<KeyIndexPair> spatial_list;
+    // List of cell-fish pairs containing the cell that the fish is in
+    vector<CellFishPair> spatial_list;
 
-        // List of the start indices of consecutive cell positions for a
-        // sorted spatial list
-        vector<int> start_indices;
+    // List of the start indices of consecutive cell positions for a
+    // sorted spatial list
+    vector<uint> start_indices;
 };
 
-int Randint(int min, int max);
+int Randint(const int min, const int max);
