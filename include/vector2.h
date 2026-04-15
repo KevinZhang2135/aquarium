@@ -38,6 +38,7 @@ class Vector2 {
         Vector2 ScaleToLength(const float length) const;
         Vector2 Normalize() const;
 
+        Vector2 Rotate(const float angle) const;
         Vector2 RotateToAngle(const float angle) const;
 
         float DistanceTo(const Vector2 point) const;

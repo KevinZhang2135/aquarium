@@ -16,6 +16,10 @@ Screen::Screen(uint width, uint height, bool full_screen) {
         renderer = SDL_CreateRenderer(window, -1, 0);
     }
 
+    if (debug) {
+        Fish::MAX_SEGMENTS = 1;
+    }
+
     // Generates optimization hash arrays
     spatial_hash = new SpatialHash(NUM_FISH, GRID_SIZE, Vector2(width, height));
 }
@@ -60,8 +64,19 @@ void Screen::DrawFish(const Fish* fish) const {
     Anchor* temp = nullptr;
 
     if (debug) {
-        // Debug point
-        filledCircleColor(renderer, anchor->position.x, anchor->position.y, anchor->radius, 0xffffffff);
+        // Debug triangle
+        float base_ratio = 0.666; // Ratio of the base to height
+
+        // Vector representing the height and base of the triangle
+        Vector2 height = fish->velocity.ScaleToLength(anchor->radius) * 4;
+        Vector2 base = height.Rotate(M_PI_2) * base_ratio;
+
+        // Triangle points
+        Vector2 pt1 = anchor->position + height * base_ratio;
+        Vector2 pt2 = anchor->position - height * (1 - base_ratio) + base / 2;
+        Vector2 pt3 = pt2 - base;
+
+        aatrigonRGBA(renderer, pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y, 255, 255, 255, 255);
         return;  // Prevents fish from being drawn for debugging
     }
 
@@ -94,10 +109,8 @@ void Screen::DrawFins(const Anchor* anchor) const {
     for (int sign = -1; sign <= 1; sign += 2) {
         // Draws a series of circles extending from the body at the fin angle
         for (uint i = 1; i <= fin_segments; i++) {
-            Vector2 fin_position = anchor->position.MoveTowards(
-                anchor->angle + fin_angle * sign, 
-                fin_radius * (1.0f + i / 2.0f)
-            );
+            Vector2 fin_position =
+                anchor->position.MoveTowards(anchor->angle + fin_angle * sign, fin_radius * (1.0f + i / 2.0f));
 
             filledCircleColor(renderer, fin_position.x, fin_position.y, fin_radius * (1.0f - i / 10.0f), color);
         }
@@ -110,7 +123,7 @@ void Screen::Render() const {
     SDL_RenderClear(renderer);
 
     // Draws fish
-    for (Fish *fish : spatial_hash->GetFish()) DrawFish(fish);
+    for (Fish* fish : spatial_hash->GetFish()) DrawFish(fish);
 
     if (debug) {
         // Draws optimization grid lines

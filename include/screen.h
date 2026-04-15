@@ -13,8 +13,8 @@ using namespace std;
 
 class Screen {
     public:
-        static const int NUM_FISH = 200;
-        static const int GRID_SIZE = 200; // Fish detection radius
+        static const int NUM_FISH = 1000;
+        static const int GRID_SIZE = 160; // Fish detection radius
 
         int width, height;
         int mouse_x, mouse_y;
@@ -33,7 +33,7 @@ class Screen {
     void Update(double delta_time);
 
     private:
-        const bool debug = false;
+        const bool debug = true;
 
         bool isRunning;
         SDL_Window *window;

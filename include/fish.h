@@ -7,7 +7,7 @@
 
 class Fish {
     public:
-        static const int MAX_SEGMENTS = 16;
+        static inline int MAX_SEGMENTS = 16;
         Vector2 velocity;
 
         // Body segments
@@ -27,7 +27,7 @@ class Fish {
         void Update(const vector<Fish *> nearby_boids);
 
     private:
-        static constexpr float MAX_SPEED = 0.3F;
+        static constexpr float MAX_SPEED = 0.16F;
         static constexpr float SCALE = 4;
         static constexpr float COLLISION_DIST = SCALE * SCALE;
 

@@ -87,9 +87,9 @@ Vector2 &Vector2::operator/=(const float &scalar) {
     return *this;
 }
 
-/// @brief Dot product or inner product of this vector and the specified vector
+/// @brief Dot product or inner product of this vector and `other` vector
 /// @param other The specified vector to find the dot product with this vector
-/// @return The dot product of this vector and the specified vector
+/// @return The dot product of this vector and `other` vector
 float Vector2::DotProduct(const Vector2 &other) const { return x * other.x + y * other.y; }
 
 /// @brief Returns the Euclidean length of the vector from the origin
@@ -98,12 +98,12 @@ float Vector2::Norm() const { return SDL_sqrtf(DotProduct(*this)); }
 
 /// @brief Returns the angle of the vector in radians
 /// @return The angle of the vector in radians
-float Vector2::Angle() const { return (!x && !y) ? 0.0f : SDL_atan2f(y, x); }
+float Vector2::Angle() const { return !(x || y) ? 0.0f : SDL_atan2f(y, x); }
 
-/// @brief Returns a new vector scaled to the specified length. A zero vector
+/// @brief Returns a new vector scaled to `length`. A zero vector
 /// is scaled to a zero vector
 /// @param length The specified length of the new vector
-/// @return A new vector with specified length
+/// @return A new vector with `length`
 Vector2 Vector2::ScaleToLength(const float length) const {
     if (Norm() == 0.0f) {
         return Vector2();
@@ -118,9 +118,16 @@ Vector2 Vector2::ScaleToLength(const float length) const {
 /// @return A normalized vector
 Vector2 Vector2::Normalize() const { return ScaleToLength(1); }
 
-/// @brief Returns a new vector rotated to the specified angle
-/// @param angle
-/// @return A new vector rotated to the specified angle
+/// @brief Returns a new vector rotated by the specified angle
+/// @param angle The angle to turn the vector by
+/// @return A new vector rotated by the specified angle
+Vector2 Vector2::Rotate(const float angle) const {
+    return RotateToAngle(Angle() + angle);
+}
+
+/// @brief Returns a new vector rotated to `angle`
+/// @param angle The angle to rotate the vector to
+/// @return A new vector rotated to `angle`
 Vector2 Vector2::RotateToAngle(const float angle) const {
     Vector2 new_vector(SDL_cosf(angle) * Norm(), SDL_sinf(angle) * Norm());
 
@@ -140,7 +147,7 @@ Vector2 Vector2::MoveTowards(const Vector2 point, const float length) const {
     return (point - *this).ScaleToLength(length);
 }
 
-/// @brief Returns a vector moved length at the specified angle
+/// @brief Returns a vector moved length at `angle`
 /// @param angle The angle to move to
 /// @param length The length of the displacement vector
 /// @return A new vector of length moved at the angle

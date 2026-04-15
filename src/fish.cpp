@@ -11,12 +11,12 @@ Fish::Fish(Vector2 position, float angle, int search_radius, Vector2 screen_size
       max_bound(min_bound + screen_size),
       search_radius(search_radius),
       screen_size(screen_size) {
-    velocity = velocity.RotateToAngle(angle + M_PI);
+    velocity = velocity.RotateToAngle(angle); // Fish 
 
     // Generates segments from head using angle
     SetAnchorRadius(head, 0);
     Anchor* segment = head;
-
+    
     for (int i = 1; i < MAX_SEGMENTS; i++) {
         segment->next = new Anchor();
         segment = segment->next;
@@ -26,7 +26,7 @@ Fish::Fish(Vector2 position, float angle, int search_radius, Vector2 screen_size
 
         // Determines separation distance of each segment
         Vector2 separation(SCALE / 2, 0);
-        position += separation.RotateToAngle(angle);
+        position -= separation.RotateToAngle(angle);
         segment->position = position;
     }
 
@@ -49,7 +49,7 @@ Fish::~Fish() {
 /// @param close_center The center of close boids
 /// @return The acceleration away from the center
 Vector2 Fish::Separate(const Vector2 close_center) const {
-    float factor = 0.005f;
+    float factor = 0.001f;
     Vector2 acceleration = head->position - close_center;
 
     return acceleration * factor;
@@ -59,7 +59,7 @@ Vector2 Fish::Separate(const Vector2 close_center) const {
 /// @param average_velocity The mean velocity of all nearby boids
 /// @return The acceleration towards the mean heading
 Vector2 Fish::Align(const Vector2 average_velocity) const {
-    float factor = 0.01f;
+    float factor = 0.02f;
     Vector2 acceleration = average_velocity - velocity;
 
     return acceleration * factor;
@@ -69,7 +69,7 @@ Vector2 Fish::Align(const Vector2 average_velocity) const {
 /// @param average_position The center of nearby boids
 /// @return The acceleration towards the center
 Vector2 Fish::Cohere(const Vector2 average_position) const {
-    float factor = 0.0001f;
+    float factor = 0.00005f;
     Vector2 acceleration = average_position - head->position;
 
     return acceleration * factor;
