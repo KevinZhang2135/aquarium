@@ -94,8 +94,10 @@ void Screen::DrawFins(const Anchor* anchor) const {
     for (int sign = -1; sign <= 1; sign += 2) {
         // Draws a series of circles extending from the body at the fin angle
         for (uint i = 1; i <= fin_segments; i++) {
-            Vector2 fin_position =
-                anchor->position.MoveTowards(anchor->angle + fin_angle * sign, fin_radius * (1.0f + i / 2.0f));
+            Vector2 fin_position = anchor->position.MoveTowards(
+                anchor->angle + fin_angle * sign, 
+                fin_radius * (1.0f + i / 2.0f)
+            );
 
             filledCircleColor(renderer, fin_position.x, fin_position.y, fin_radius * (1.0f - i / 10.0f), color);
         }
@@ -163,14 +165,17 @@ void Screen::UpdateBoid(Fish* boid) const {
 }
 
 /// @brief Updates the heading and position of each boid
-void Screen::Update() {
+void Screen::Update(double delta_time) {
+    int fps = 1000 / delta_time;
+    SDL_SetWindowTitle(window, std::format("Aquarium | {} fps", fps).c_str());
+
     spatial_hash->Update();
     for (Fish* fish : spatial_hash->GetFish()) {
         UpdateBoid(fish);
     }
 
     for (Fish* fish : spatial_hash->GetFish()) {
-        fish->Move();
+        fish->Move(delta_time);
     }
 
     SDL_GetMouseState(&mouse_x, &mouse_y);

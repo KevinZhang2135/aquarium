@@ -49,7 +49,7 @@ Fish::~Fish() {
 /// @param close_center The center of close boids
 /// @return The acceleration away from the center
 Vector2 Fish::Separate(const Vector2 close_center) const {
-    float factor = 0.01f;
+    float factor = 0.005f;
     Vector2 acceleration = head->position - close_center;
 
     return acceleration * factor;
@@ -69,7 +69,7 @@ Vector2 Fish::Align(const Vector2 average_velocity) const {
 /// @param average_position The center of nearby boids
 /// @return The acceleration towards the center
 Vector2 Fish::Cohere(const Vector2 average_position) const {
-    float factor = 0.0005f;
+    float factor = 0.0001f;
     Vector2 acceleration = average_position - head->position;
 
     return acceleration * factor;
@@ -80,8 +80,8 @@ Vector2 Fish::Cohere(const Vector2 average_position) const {
 void Fish::SetPosition(const Vector2 point) { head->SetPosition(point); }
 
 /// @brief Moves the fish using boid behavior
-void Fish::Move() {
-    head->MoveTo(head->position + velocity);
+void Fish::Move(double delta_time) {
+    head->MoveTo(head->position + velocity * delta_time);
 
     // Keeps fish within margin distance outside the screen
     Vector2 min_bound = {-float(GRID_MARGIN), -float(GRID_MARGIN)};

@@ -14,7 +14,7 @@ using namespace std;
 class Screen {
     public:
         static const int NUM_FISH = 200;
-        static const int GRID_SIZE = 100; // Fish detection radius
+        static const int GRID_SIZE = 200; // Fish detection radius
 
         int width, height;
         int mouse_x, mouse_y;
@@ -30,7 +30,7 @@ class Screen {
 
         vector<Fish *> SearchForBoids(Vector2 point) const;
         void UpdateBoid(Fish *fish) const;
-    void Update();
+    void Update(double delta_time);
 
     private:
         const bool debug = false;

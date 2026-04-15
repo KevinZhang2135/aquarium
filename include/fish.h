@@ -22,12 +22,12 @@ class Fish {
         Vector2 Align(const Vector2 average_velocity) const;
         Vector2 Cohere(const Vector2 average_position) const;
 
-        void Move();
+        void Move(double delta_time);
         void SetPosition(const Vector2 point);
         void Update(const vector<Fish *> nearby_boids);
 
     private:
-        static constexpr float MAX_SPEED = 1.0F;
+        static constexpr float MAX_SPEED = 0.3F;
         static constexpr float SCALE = 4;
         static constexpr float COLLISION_DIST = SCALE * SCALE;
 
