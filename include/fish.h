@@ -29,14 +29,15 @@ class Fish {
     private:
         static constexpr float MAX_SPEED = 0.16F;
         static constexpr float SCALE = 4;
-        static constexpr float COLLISION_DIST = SCALE * SCALE;
 
         // The maximum distance the fish can travel off screen before being
         // teleported to the other side
         static constexpr float GRID_MARGIN = 50.0f;
         Vector2 min_bound, max_bound;
 
-        int search_radius;
+        float search_radius;
+        float collision_dist;
+
         Vector2 screen_size;
 
         void SetAnchorRadius(Anchor *anchor, const int anchor_index) const;

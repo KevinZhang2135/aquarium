@@ -11,6 +11,8 @@ Fish::Fish(Vector2 position, float angle, int search_radius, Vector2 screen_size
       max_bound(min_bound + screen_size),
       search_radius(search_radius),
       screen_size(screen_size) {
+
+    collision_dist = search_radius / 2;
     velocity = velocity.RotateToAngle(angle); // Fish 
 
     // Generates segments from head using angle
@@ -49,7 +51,7 @@ Fish::~Fish() {
 /// @param close_center The center of close boids
 /// @return The acceleration away from the center
 Vector2 Fish::Separate(const Vector2 close_center) const {
-    float factor = 0.001f;
+    float factor = 0.0001f;
     Vector2 acceleration = head->position - close_center;
 
     return acceleration * factor;
@@ -59,7 +61,7 @@ Vector2 Fish::Separate(const Vector2 close_center) const {
 /// @param average_velocity The mean velocity of all nearby boids
 /// @return The acceleration towards the mean heading
 Vector2 Fish::Align(const Vector2 average_velocity) const {
-    float factor = 0.02f;
+    float factor = 0.012f;
     Vector2 acceleration = average_velocity - velocity;
 
     return acceleration * factor;
@@ -138,7 +140,7 @@ void Fish::Update(const vector<Fish*> nearby_boids) {
             }
 
             // Avoids boids within collision distance
-            if (distance < COLLISION_DIST) {
+            if (distance < collision_dist) {
                 close_center += boid_position;
                 close_count++;
             }
